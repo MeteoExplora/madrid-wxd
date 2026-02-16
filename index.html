@@ -41,16 +41,18 @@
 <header>
   <h1>MeteoExplora – Madrid</h1>
   <select id="variable">
-    <option value="temperature_2m">Temperatura 2m</option>
-    <option value="pressure_msl">Presión MSL</option>
-    <option value="windspeed_10m">Viento 10m</option>
-    <option value="temperature_850hPa">Temperatura 850hPa</option>
+    <option value="temperature_2m">Temperatura 2 m</option>
+    <option value="temperature_850hPa">Temperatura 850 hPa (T850)</option>
   </select>
   <button id="load">Actualizar</button>
 </header>
 
 <main>
-  <canvas id="chart" width="1000" height="400"></canvas>
+  <h2>Temperatura 2 m</h2>
+  <canvas id="chart_temp2m" width="1000" height="400"></canvas>
+
+  <h2>Temperatura 850 hPa (T850)</h2>
+  <canvas id="chart_t850" width="1000" height="400"></canvas>
 </main>
 
 <script src="app.js"></script>
