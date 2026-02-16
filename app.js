@@ -25,19 +25,16 @@ function drawChart(times, values, label){
 
   if(chart) chart.destroy();
 
+  // Simulamos 3 modelos (ensembles)
+  const datasets = [
+    {label: label + " - Modelo A", data: values, borderColor: "#4da6ff", tension: 0.3, pointRadius: 0},
+    {label: label + " - Modelo B", data: values.map(v => v + (Math.random()*2-1)), borderColor: "#ff9933", tension: 0.3, pointRadius: 0},
+    {label: label + " - Modelo C", data: values.map(v => v + (Math.random()*2-1)), borderColor: "#33ff99", tension: 0.3, pointRadius: 0},
+  ];
+
   chart = new Chart(document.getElementById("chart"), {
     type: "line",
-    data: {
-      labels: times,
-      datasets: [{
-        label: label,
-        data: values,
-        borderColor: "#4da6ff",
-        borderWidth: 2,
-        tension: 0.3,
-        pointRadius: 0
-      }]
-    },
+    data: { labels: times, datasets: datasets },
     options:{
       responsive:true,
       plugins:{
@@ -50,6 +47,7 @@ function drawChart(times, values, label){
     }
   });
 }
+
 
 // Carga inicial
 loadData();
