@@ -3,42 +3,81 @@ const LON = -3.7038;
 
 let chart;
 
+// Evento botón
 document.getElementById("load").addEventListener("click", loadData);
 
-async function loadData(){
+// Función principal para cargar datos de varios modelos
+async function loadData() {
 
   const variable = document.getElementById("variable").value;
 
-  const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&hourly=${variable}&forecast_days=7`;
+  const url = `https://api.open-meteo.com/v1/ensemble?latitude=${LAT}&longitude=${LON}&models=gfs_ensemble,ecmwf_ensemble,icon_eps&hourly=${variable}&forecast_days=7`;
 
   const response = await fetch(url);
   const data = await response.json();
 
-  const times = data.hourly.time;
-  const values = data.hourly[variable];
+  // Construir datasets de cada miembro de cada modelo
+  const datasets = [];
 
-  drawChart(times, values, variable);
+  // GFS Ensemble
+  if(data.models.gfs_ensemble){
+    data.models.gfs_ensemble.members.forEach((member, i)=>{
+      datasets.push({
+        label: `GFS ${member.name}`,
+        data: member[variable],
+        borderColor: "#4da6ff",
+        tension: 0.3,
+        pointRadius: 0
+      });
+    });
+  }
+
+  // ECMWF Ensemble
+  if(data.models.ecmwf_ensemble){
+    data.models.ecmwf_ensemble.members.forEach((member,i)=>{
+      datasets.push({
+        label: `ECMWF ${member.name}`,
+        data: member[variable],
+        borderColor: "#ff9933",
+        tension: 0.3,
+        pointRadius: 0
+      });
+    });
+  }
+
+  // ICON EPS
+  if(data.models.icon_eps){
+    data.models.icon_eps.members.forEach((member,i)=>{
+      datasets.push({
+        label: `ICON ${member.name}`,
+        data: member[variable],
+        borderColor: "#33ff99",
+        tension: 0.3,
+        pointRadius: 0
+      });
+    });
+  }
+
+  const times = data.models.gfs_ensemble.members[0].time;
+
+  drawChart(times, datasets, variable);
 }
 
-function drawChart(times, values, label){
+// Función para dibujar el gráfico
+function drawChart(times, datasets, label){
 
   if(chart) chart.destroy();
 
-  // Simulamos 3 modelos (ensembles)
-  const datasets = [
-    {label: label + " - Modelo A", data: values, borderColor: "#4da6ff", tension: 0.3, pointRadius: 0},
-    {label: label + " - Modelo B", data: values.map(v => v + (Math.random()*2-1)), borderColor: "#ff9933", tension: 0.3, pointRadius: 0},
-    {label: label + " - Modelo C", data: values.map(v => v + (Math.random()*2-1)), borderColor: "#33ff99", tension: 0.3, pointRadius: 0},
-  ];
-
   chart = new Chart(document.getElementById("chart"), {
     type: "line",
-    data: { labels: times, datasets: datasets },
+    data: {
+      labels: times,
+      datasets: datasets
+    },
     options:{
       responsive:true,
       plugins:{
-        legend:{ labels:{ color:"white" } }
+        legend:{ labels:{ color:"white", maxHeight:100 } }
       },
       scales:{
         x:{ ticks:{ color:"white" }},
@@ -48,51 +87,6 @@ function drawChart(times, values, label){
   });
 }
 
-
-async function loadMultipleCharts(){
-  const variables = ["temperature_2m", "pressure_msl", "windspeed_10m", "temperature_850hPa"];
-  const ids = ["chart1","chart2","chart3","chart4"];
-  
-  for(let i=0;i<variables.length;i++){
-    const variable = variables[i];
-    const id = ids[i];
-
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&hourly=${variable}&forecast_days=7`;
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    const times = data.hourly.time;
-    const values = data.hourly[variable];
-
-    drawChartMultiple(times, values, variable, id);
-  }
-}
-
-function drawChartMultiple(times, values, label, canvasId){
-
-  // Simulamos 3 modelos
-  const datasets = [
-    {label: label + " - Modelo A", data: values, borderColor: "#4da6ff", tension:0.3, pointRadius:0},
-    {label: label + " - Modelo B", data: values.map(v => v + (Math.random()*2-1)), borderColor:"#ff9933", tension:0.3, pointRadius:0},
-    {label: label + " - Modelo C", data: values.map(v => v + (Math.random()*2-1)), borderColor:"#33ff99", tension:0.3, pointRadius:0},
-  ];
-
-  new Chart(document.getElementById(canvasId),{
-    type:"line",
-    data:{labels:times, datasets:datasets},
-    options:{
-      responsive:true,
-      plugins:{legend:{labels:{color:"white"}}},
-      scales:{x:{ticks:{color:"white"}}, y:{ticks:{color:"white"}}}
-    }
-  });
-}
-
-// Llamada inicial
-loadMultipleCharts();
-
-
-
 // Carga inicial
 loadData();
+
