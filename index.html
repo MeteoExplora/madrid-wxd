@@ -28,9 +28,11 @@
   main{
     padding:20px;
   }
+  canvas{
+    margin-bottom:40px;
+  }
 </style>
 
-<!-- Librería de gráficos -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
@@ -38,39 +40,19 @@
 
 <header>
   <h1>MeteoExplora – Madrid</h1>
-
   <select id="variable">
-    <option value="temperature_2m">Temperatura (2 m)</option>
-    <option value="temperature_850hPa">Temperatura 850 hPa (T850)</option>
-    <option value="pressure_msl">Presión (MSL)</option>
-    <option value="windspeed_10m">Viento (10 m)</option>
+    <option value="temperature_2m">Temperatura 2m</option>
+    <option value="pressure_msl">Presión MSL</option>
+    <option value="windspeed_10m">Viento 10m</option>
+    <option value="temperature_850hPa">Temperatura 850hPa</option>
   </select>
-
   <button id="load">Actualizar</button>
 </header>
 
-  
 <main>
-  <h2>Gráfico principal</h2>
-  <canvas id="chart1" width="800" height="400"></canvas>
-
-  <h2>Presión MSL</h2>
-  <canvas id="chart2" width="800" height="400"></canvas>
-
-  <h2>Viento 10 m</h2>
-  <canvas id="chart3" width="800" height="400"></canvas>
-
-  <h2>Temperatura 850 hPa (T850)</h2>
-  <canvas id="chart4" width="800" height="400"></canvas>
-</main>
-
-  
-
-<main>
-  <canvas id="chart" width="800" height="400"></canvas>
+  <canvas id="chart" width="1000" height="400"></canvas>
 </main>
 
 <script src="app.js"></script>
 </body>
 </html>
-
