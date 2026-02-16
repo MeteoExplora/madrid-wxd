@@ -1,4 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>MeteoExplora – Madrid</title>
+<style>
+  body{
+    background:#0b0f19;
+    color:white;
+    font-family:Arial,sans-serif;
+    margin:0;
+    padding:0;
+  }
+  header{
+    padding:15px;
+    background:#141a2e;
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  select,button{
+    background:#1f2a44;
+    color:white;
+    border:none;
+    padding:8px;
+    border-radius:4px;
+  }
+  main{
+    padding:20px;
+  }
+</style>
+
+<!-- Librería de gráficos -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+
+<header>
+  <h1>MeteoExplora – Madrid</h1>
+
+  <select id="variable">
+    <option value="temperature_2m">Temperatura (2 m)</option>
+    <option value="pressure_msl">Presión (MSL)</option>
+    <option value="windspeed_10m">Viento (10 m)</option>
+  </select>
+
+  <button id="load">Actualizar</button>
+</header>
+
 <main>
   <canvas id="chart" width="800" height="400"></canvas>
 </main>
+
+<script src="app.js"></script>
+</body>
+</html>
 
