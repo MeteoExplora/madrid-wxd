@@ -3,12 +3,14 @@ const LON = -3.7038;
 
 let chart;
 
+document.getElementById("load").addEventListener("click", loadData);
+
 async function loadData(){
 
   const variable = document.getElementById("variable").value;
 
   const url =
-  `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&hourly=${variable}&forecast_days=7`;
+    `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&hourly=${variable}&forecast_days=7`;
 
   const response = await fetch(url);
   const data = await response.json();
@@ -49,5 +51,5 @@ function drawChart(times, values, label){
   });
 }
 
+// Carga inicial
 loadData();
-
